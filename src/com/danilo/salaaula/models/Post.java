@@ -1,5 +1,6 @@
 package com.danilo.salaaula.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Post {
@@ -10,6 +11,7 @@ public class Post {
     public Post(User author, String title) {
         this.author = author;
         this.title = title;
+        this.commentaries = new ArrayList<>();
     }
 
     public User getAuthor() {
@@ -33,6 +35,6 @@ public class Post {
     }
 
     public void addComment(Comment commnet) {
-        //TODO
+        this.commentaries.add(commnet);
     }
 }

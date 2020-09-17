@@ -10,7 +10,7 @@ public class User {
     private String email;
     private String password;
     private UserType type;
-    private List<Class> classes;
+    protected List<Class> classes;
 
     public User(String cpf, String name, String email,
                 String password, UserType type) {

@@ -5,7 +5,9 @@ public class Professor extends User {
         super(cpf, name, email, password, type);
     }
 
-    public void createClass(String className) {
-        //TODO
+    public void createClass(Class c) {
+        //TODO: verificar se isso ta legal
+        this.classes.add(c);
     }
+
 }

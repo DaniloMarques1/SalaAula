@@ -14,6 +14,7 @@ public class Class {
         this.name = name;
         this.author = author;
         this.students = new ArrayList<>();
+        this.posts = new ArrayList<>();
     }
 
     public String getName() {
@@ -42,10 +43,10 @@ public class Class {
 
     // APENAS user do tipo STUDENT
     public void addStudentToClass(User student) {
-        //TODO
+        this.students.add(student);
     }
 
-//    public void addPost(Post post) {
-//        //TODO
-//    }
+    public void addPost(Post post) {
+        this.posts.add(post);
+    }
 }
