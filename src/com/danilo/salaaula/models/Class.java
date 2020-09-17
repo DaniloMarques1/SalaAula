@@ -1,15 +1,19 @@
 package com.danilo.salaaula.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // sala de aula/TURMA
 public class Class {
     private String name;
     private Professor author;
-//    private Posts[] posts; // TODO
-    private User[] alunos; // apenas alunos tipo STUDENT
+    private List<Post> posts;
+    private List<User> students; // apenas alunos tipo STUDENT
 
     public Class(String name, Professor author) {
         this.name = name;
         this.author = author;
+        this.students = new ArrayList<>();
     }
 
     public String getName() {
@@ -28,12 +32,12 @@ public class Class {
         this.author = author;
     }
 
-    public User[] getAlunos() {
-        return alunos;
+    public List<User> getStudents() {
+        return this.students;
     }
 
-    public void setAlunos(User[] alunos) {
-        this.alunos = alunos;
+    public void setStudents(List<User> students) {
+        this.students = students;
     }
 
     // APENAS user do tipo STUDENT

@@ -1,12 +1,16 @@
 package com.danilo.salaaula.models;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
     private String cpf; // chave primaria
     private String name;
     private String email;
     private String password;
     private UserType type;
+    private List<Class> classes;
 
     public User(String cpf, String name, String email,
                 String password, UserType type) {
@@ -15,6 +19,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.type = type;
+        this.classes = new ArrayList<Class>();
     }
 
     public String getCpf() {
@@ -56,5 +61,8 @@ public class User {
     public void setType(UserType type) {
         this.type = type;
     }
-//    private Turmas[] turmas; // TODO
+
+    public List<Class> getClasses() {
+        return this.classes;
+    }
 }
