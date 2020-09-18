@@ -9,7 +9,9 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        studentsNotClass();
+        addProfessor();
+//        addStudents();
+//        studentsNotClass();
 //        createObjects();
 //        System.out.printf("");
 //        addStudents();
@@ -55,6 +57,18 @@ public class Main {
         pob.addPost(post);
     }
 
+    public static void addProfessor() {
+        Fachada.inicializar();
+        try {
+//            Fachada.addProfessor("1209","Geohot", "geohot@gmail.com", "1234");
+            Fachada.addProfessor("1209","Geohot", "geo@gmail.com", "1234");
+            System.out.println("Professor adicionado");
+        } catch (Exception e) {
+            System.out.printf("Error. %s", e.getMessage());
+        }
+        Fachada.finalizar();
+    }
+
     public static void createObjects() {
         Fachada.inicializar();
 
@@ -78,7 +92,7 @@ public class Main {
         try{
 //            Fachada.addStudent("2", "Danilo", "danilo@gmail.com", "1234");
 //            Fachada.addStudent("34", "Messi", "messi@gmail.com", "1234");
-            Fachada.addStudent("5", "Leo", "leo@gmail.com", "1234");
+            Fachada.addStudent("50", "Leo", "leo@gmail.com", "1234");
             System.out.println("Estudante criado com sucesso");
         } catch (Exception e) {
 

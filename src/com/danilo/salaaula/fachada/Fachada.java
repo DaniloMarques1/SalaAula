@@ -23,7 +23,7 @@ public class Fachada {
 
     public static void addStudent(String cpf, String name, String email, String password) throws Exception {
         DAO.begin();
-        Student studentExist = daoStudent.read(cpf);
+        Student studentExist = daoStudent.read(email, cpf);
         if (studentExist != null) {
             throw new Exception("User already registered");
         }
@@ -34,7 +34,7 @@ public class Fachada {
 
     public static void addProfessor(String cpf, String name, String email, String password) throws Exception {
         DAO.begin();
-        Professor professorExist = daoProfessor.read(cpf);
+        Professor professorExist = daoProfessor.read(email, cpf);
         if (professorExist != null) {
             throw new Exception("Professor already registered");
         }

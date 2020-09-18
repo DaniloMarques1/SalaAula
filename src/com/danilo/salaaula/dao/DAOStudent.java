@@ -22,6 +22,18 @@ public class DAOStudent extends DAO<Student> {
         return null;
     }
 
+    public Student read(String email, String cpf) {
+        Query q = manager.query();
+        q.constrain(Student.class);
+        q.constrain(new StudentRegistered(email, cpf));
+        List<Student> students = q.execute();
+
+        if (students.size() > 0)
+            return students.get(0);
+
+        return null;
+    }
+
     public List<Student> readAll(String className) {
         Query q = manager.query();
         q.constrain(Student.class);
@@ -48,5 +60,24 @@ class StudentNotInClass implements Evaluation {
             }
         }
         candidate.include(shouldInclude);
+    }
+}
+
+class StudentRegistered implements Evaluation {
+    private String email;
+    private String cpf;
+
+    public StudentRegistered(String email, String cpf) {
+        this.email = email;
+        this.cpf   = cpf;
+    }
+
+    @Override
+    public void evaluate(Candidate candidate) {
+        Student std = (Student) candidate.getObject();
+        boolean flag = false;
+        if (std.getCpf().equals(this.cpf) || std.getEmail().equals(this.email))
+            flag = true;
+        candidate.include(flag);
     }
 }
