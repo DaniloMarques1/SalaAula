@@ -9,16 +9,21 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-//        createObjects();
-//        addStudents();
-//        listAll();
-//        addStudentToStragerClass();
-//        listAll();
+        createObjects();
+        System.out.printf("");
+        addStudents();
+        System.out.printf("");
+        listAll();
+        System.out.printf("");
+        addStudentToStragerClass();
+        System.out.printf("");
+        listAll();
+        System.out.printf("");
     }
 
     public static void createObjectsNoDatabase() {
         //Criar um pouco do fluxo, verificar se esta funcionando...
-        User u1      = new User("1", "Danilo", "danilo@gmail.com", "1234", UserType.STUDENT);
+        User u1      = new Student("1", "Danilo", "danilo@gmail.com", "1234");
         Professor p1 = new Professor("2", "Messi", "messi@gmail.com", "12345");
         ClassRoom c1     = new ClassRoom("POB", p1);
         c1.addStudentToClass(u1);
@@ -92,8 +97,8 @@ public class Main {
                     System.out.println(c);
                     System.out.println("Alunos que nao estao na turma:");
                     System.out.println("========================");
-                    List<User> users = Fachada.listUsersNotInClass(c);
-                    for (User u: users) {
+                    List<Student> students = Fachada.listUsersNotInClass(c);
+                    for (Student u: students) {
                         System.out.println(u);
                     }
                 }

@@ -1,46 +1,46 @@
 package com.danilo.salaaula.dao;
 
 import com.danilo.salaaula.models.ClassRoom;
-import com.danilo.salaaula.models.User;
+import com.danilo.salaaula.models.Student;
 import com.db4o.query.Candidate;
 import com.db4o.query.Evaluation;
 import com.db4o.query.Query;
 
 import java.util.List;
 
-public class DAOUser extends DAO<User> {
+public class DAOStudent extends DAO<Student> {
     @Override
-    public User read(Object chave) {
+    public Student read(Object chave) {
         String cpf = (String) chave;
         Query q = manager.query();
-        q.constrain(User.class);
+        q.constrain(Student.class);
         q.descend("cpf").constrain(cpf);
-        List<User> users = q.execute();
+        List<Student> users = q.execute();
         if (users.size() > 0) {
             return users.get(0);
         }
         return null;
     }
 
-    public List<User> readAll(String className) {
+    public List<Student> readAll(String className) {
         Query q = manager.query();
-        q.constrain(User.class);
-        q.constrain(new UserNotInClass(className));
-        List<User> users = q.execute();
+        q.constrain(Student.class);
+        q.constrain(new StudentNotInClass(className));
+        List<Student> students = q.execute();
 
-        return users;
+        return students;
     }
 }
 
-class UserNotInClass implements Evaluation {
+class StudentNotInClass implements Evaluation {
     private String className;
-    public UserNotInClass(String className) {
+    public StudentNotInClass(String className) {
         this.className = className;
     }
 
     @Override
     public void evaluate(Candidate candidate) {
-        User user = (User) candidate.getObject();
+        Student user = (Student) candidate.getObject();
         boolean shouldInclude = true;
         for (ClassRoom c: user.getClasses()) {
             if (c.getName() == this.className) {

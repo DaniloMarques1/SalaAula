@@ -4,7 +4,7 @@ package com.danilo.salaaula.models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User {
+public abstract class User {
     /* TESTANDO CRIACAO DE OBJETOS */
 
     private String cpf; // chave primaria
@@ -71,9 +71,5 @@ public class User {
     public String toString() {
         String s = String.format("Student: %s", this.getName());
         return s;
-    }
-
-    public void addClass(ClassRoom c) {
-        this.classRooms.add(c);
     }
 }

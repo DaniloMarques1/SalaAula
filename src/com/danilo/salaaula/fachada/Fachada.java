@@ -1,19 +1,18 @@
 package com.danilo.salaaula.fachada;
 
 import com.danilo.salaaula.dao.DAO;
-import com.danilo.salaaula.dao.DAOUser;
+import com.danilo.salaaula.dao.DAOStudent;
 import com.danilo.salaaula.dao.DAOProfessor;
 import com.danilo.salaaula.dao.DAOClassroom;
 
-import com.danilo.salaaula.models.ClassRoom;
-import com.danilo.salaaula.models.Professor;
-import com.danilo.salaaula.models.User;
-import com.danilo.salaaula.models.UserType;
+import com.danilo.salaaula.dao.DAOStudent;
+import com.danilo.salaaula.models.*;
 
+import java.io.DataOutputStream;
 import java.util.List;
 
 public class Fachada {
-    private static DAOUser daoUser = new DAOUser();
+    private static DAOStudent daoStudent = new DAOStudent();
     private static DAOProfessor daoProfessor = new DAOProfessor();
     private static DAOClassroom daoClassroom = new DAOClassroom();
 
@@ -27,12 +26,12 @@ public class Fachada {
 
     public static void addStudent(String cpf, String name, String email, String password) throws Exception {
         DAO.begin();
-        User userExist = daoUser.read(cpf);
-        if (userExist != null) {
+        Student studentExist = daoStudent.read(cpf);
+        if (studentExist != null) {
             throw new Exception("User already registered");
         }
-        User user = new User(cpf, name, email, password, UserType.STUDENT);
-        daoUser.create(user);
+        Student student = new Student(cpf, name, email, password);
+        daoStudent.create(student);
         DAO.commit();
     }
 
@@ -70,17 +69,25 @@ public class Fachada {
         DAO.begin();
 
         ClassRoom c = daoClassroom.read(className);
-        User student = daoUser.read(userCpf);
+        if (c == null) {
+            throw new Exception("Class does not exist");
+        }
+
+        Student student = daoStudent.read(userCpf);
+        if (student == null) {
+            throw new Exception("Student not registered");
+        }
+
         c.addStudentToClass(student);
         student.addClass(c);
         daoClassroom.update(c);
-        daoUser.update(student);
+        daoStudent.update(student);
 
         DAO.commit();
     }
 
-    public static List<User> listUsersNotInClass(ClassRoom c) {
-        List<User> users = daoUser.readAll(c.getName());
+    public static List<Student> listUsersNotInClass(ClassRoom c) {
+        List<Student> users = daoStudent.readAll(c.getName());
         return users;
     }
 
