@@ -1,20 +1,17 @@
 package com.danilo.salaaula.fachada;
 
-import com.danilo.salaaula.dao.DAO;
-import com.danilo.salaaula.dao.DAOStudent;
-import com.danilo.salaaula.dao.DAOProfessor;
-import com.danilo.salaaula.dao.DAOClassroom;
+import com.danilo.salaaula.dao.*;
 
-import com.danilo.salaaula.dao.DAOStudent;
 import com.danilo.salaaula.models.*;
 
-import java.io.DataOutputStream;
 import java.util.List;
 
 public class Fachada {
-    private static DAOStudent daoStudent = new DAOStudent();
+    private static DAOStudent daoStudent     = new DAOStudent();
     private static DAOProfessor daoProfessor = new DAOProfessor();
     private static DAOClassroom daoClassroom = new DAOClassroom();
+    private static DAOPost daoPost           = new DAOPost();
+    private static DAOComment daoComment     = new DAOComment();
 
     public static void inicializar() {
         DAO.open();
@@ -89,12 +86,48 @@ public class Fachada {
     public static List<Student> listUsersNotInClass(String className) throws Exception {
         ClassRoom c = daoClassroom.read(className);
 
-        if (c == null) {
+        if (c == null)
             throw new Exception("Class does not exist");
-        }
+
 
         List<Student> students = daoStudent.readAll(c.getName());
         return students;
+    }
+
+    public static void addPostToClassRoom(String profCpf, String className, String postTile) throws Exception {
+        DAO.begin();
+
+        ClassRoom c = daoClassroom.read(className);
+        if (c == null)
+            throw new Exception("Class does not exist");
+
+        Professor professor = daoProfessor.read(profCpf);
+        if (c == null)
+            throw new Exception("Professor not registered");
+
+
+        Post post = new Post(professor, postTile);
+        c.addPost(post);
+        daoClassroom.update(c);
+        daoPost.create(post);
+
+        DAO.commit();
+    }
+
+    // alunos/professores podem adicionar comentarios
+    public static void addCommentToPost(String postTitle, String comment, User user) throws Exception{
+        DAO.begin();
+
+        Post post = daoPost.read(postTitle);
+        if (post == null)
+            throw new Exception("Post not found");
+
+        Comment c = new Comment(user, comment);
+        post.addComment(c);
+        daoPost.update(post);
+        daoComment.create(c);
+
+        DAO.commit();
     }
 
     public static List<Professor> getAllProfessors() {

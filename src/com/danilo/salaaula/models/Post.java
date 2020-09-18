@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Post {
-    private User author;
+    private Professor author;
     private String title;
     private List<Comment> commentaries;
 
-    public Post(User author, String title) {
+    public Post(Professor author, String title) {
         this.author = author;
         this.title = title;
         this.commentaries = new ArrayList<>();
@@ -18,7 +18,7 @@ public class Post {
         return author;
     }
 
-    public void setAuthor(User author) {
+    public void setAuthor(Professor author) {
         this.author = author;
     }
 
