@@ -6,13 +6,13 @@ import java.util.List;
 
 public class User {
     /* TESTANDO CRIACAO DE OBJETOS */
-    
+
     private String cpf; // chave primaria
     private String name;
     private String email;
     private String password;
     private UserType type;
-    private List<Class> classes;
+    private List<ClassName> classNames;
 
     public User(String cpf, String name, String email,
                 String password, UserType type) {
@@ -21,7 +21,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.type = UserType.STUDENT;
-        this.classes = new ArrayList<Class>();
+        this.classNames = new ArrayList<ClassName>();
     }
 
     public String getCpf() {
@@ -64,7 +64,7 @@ public class User {
         this.type = type;
     }
 
-    public List<Class> getClasses() {
-        return this.classes;
+    public List<ClassName> getClasses() {
+        return this.classNames;
     }
 }

@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 // sala de aula/TURMA
-public class Class {
+public class ClassName {
     private String name;
     private Professor author;
     private List<Post> posts;
     private List<User> students; // apenas alunos tipo STUDENT
 
-    public Class(String name, Professor author) {
+    public ClassName(String name, Professor author) {
         this.name = name;
         this.author = author;
         this.students = new ArrayList<>();
