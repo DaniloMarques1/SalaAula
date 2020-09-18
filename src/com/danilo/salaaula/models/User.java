@@ -67,4 +67,13 @@ public class User {
     public List<ClassRoom> getClasses() {
         return this.classRooms;
     }
+
+    public String toString() {
+        String s = String.format("Student: %s", this.getName());
+        return s;
+    }
+
+    public void addClass(ClassRoom c) {
+        this.classRooms.add(c);
+    }
 }

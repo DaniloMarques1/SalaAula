@@ -1,5 +1,6 @@
 package com.danilo.salaaula;
 
+import com.danilo.salaaula.fachada.Fachada;
 import com.danilo.salaaula.models.*;
 import com.danilo.salaaula.models.ClassRoom;
 
@@ -8,6 +9,14 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
+//        createObjects();
+//        addStudents();
+//        listAll();
+//        addStudentToStragerClass();
+//        listAll();
+    }
+
+    public static void createObjectsNoDatabase() {
         //Criar um pouco do fluxo, verificar se esta funcionando...
         User u1      = new User("1", "Danilo", "danilo@gmail.com", "1234", UserType.STUDENT);
         Professor p1 = new Professor("2", "Messi", "messi@gmail.com", "12345");
@@ -38,4 +47,72 @@ public class Main {
         Post post = new Post(p1, "Post 1");
         pob.addPost(post);
     }
+
+    public static void createObjects() {
+        Fachada.inicializar();
+
+        try {
+            // criando uma nova turma
+
+            Fachada.addProfessor("1", "Strager", "strager@gmail.com", "1234");
+            Fachada.addClassRoom("Matematics 1", "1");
+
+            System.out.println("Turma criada com sucesso!");
+        } catch (Exception e) {
+            System.out.printf("Error. %s", e.getMessage());
+        }
+
+        Fachada.finalizar();
+    }
+
+    public static void addStudents() {
+        Fachada.inicializar();
+
+        try{
+            Fachada.addStudent("2", "Danilo", "danilo@gmail.com", "1234");
+            Fachada.addStudent("34", "Messi", "messi@gmail.com", "1234");
+            System.out.println("Estudante criado com sucesso");
+        } catch (Exception e) {
+
+            System.out.printf("Error. %s", e.getMessage());
+        }
+
+        Fachada.finalizar();
+    }
+
+    public static void listAll() {
+        Fachada.inicializar();
+        try {
+            List<Professor> ps = Fachada.getAllProfessors();
+            for (Professor p: ps) {
+                System.out.println(p);
+                System.out.println("Turmas do professor:");
+                System.out.println("========================");
+                for (ClassRoom c: p.getClasses()) {
+                    System.out.println(c);
+                    System.out.println("Alunos que nao estao na turma:");
+                    System.out.println("========================");
+                    List<User> users = Fachada.listUsersNotInClass(c);
+                    for (User u: users) {
+                        System.out.println(u);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.printf("Error. %s", e.getMessage());
+        }
+
+        Fachada.finalizar();
+    }
+
+    public static void addStudentToStragerClass() {
+        Fachada.inicializar();
+        try {
+            Fachada.addStudentToClass("34", "Matematics 1");
+        } catch(Exception e) {
+            System.out.printf("Error. %s", e.getMessage());
+        }
+        Fachada.finalizar();
+    }
+
 }

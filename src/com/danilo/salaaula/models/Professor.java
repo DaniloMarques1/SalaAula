@@ -10,4 +10,9 @@ public class Professor extends User {
         this.getClasses().add(c);
     }
 
+    public String toString() {
+        String s = String.format("Professor: %s", this.getName());
+        return s;
+    }
+
 }

@@ -51,4 +51,8 @@ public class ClassRoom {
         this.posts.add(post);
     }
 
+    public String toString() {
+        String s = String.format("Class name: %s\nClassProfessor: %s", this.getName(), this.getAuthor().getName());
+        return s;
+    }
 }
