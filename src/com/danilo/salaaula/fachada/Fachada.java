@@ -86,9 +86,15 @@ public class Fachada {
         DAO.commit();
     }
 
-    public static List<Student> listUsersNotInClass(ClassRoom c) {
-        List<Student> users = daoStudent.readAll(c.getName());
-        return users;
+    public static List<Student> listUsersNotInClass(String className) throws Exception {
+        ClassRoom c = daoClassroom.read(className);
+
+        if (c == null) {
+            throw new Exception("Class does not exist");
+        }
+
+        List<Student> students = daoStudent.readAll(c.getName());
+        return students;
     }
 
     public static List<Professor> getAllProfessors() {
