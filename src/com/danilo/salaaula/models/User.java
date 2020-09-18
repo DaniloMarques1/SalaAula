@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User {
+    /* TESTANDO CRIACAO DE OBJETOS */
+    
     private String cpf; // chave primaria
     private String name;
     private String email;
     private String password;
     private UserType type;
-    protected List<Class> classes;
+    private List<Class> classes;
 
     public User(String cpf, String name, String email,
                 String password, UserType type) {
@@ -18,7 +20,7 @@ public class User {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.type = type;
+        this.type = UserType.STUDENT;
         this.classes = new ArrayList<Class>();
     }
 

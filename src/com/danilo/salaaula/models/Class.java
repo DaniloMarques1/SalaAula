@@ -41,12 +41,14 @@ public class Class {
         this.students = students;
     }
 
-    // APENAS user do tipo STUDENT
     public void addStudentToClass(User student) {
+        //TODO: isso ta bom?
         this.students.add(student);
+        student.getClasses().add(this);
     }
 
     public void addPost(Post post) {
         this.posts.add(post);
     }
+
 }
