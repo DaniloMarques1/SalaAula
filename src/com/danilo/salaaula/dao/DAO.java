@@ -8,7 +8,7 @@ import com.db4o.ObjectContainer;
 import com.db4o.config.EmbeddedConfiguration;
 import com.db4o.query.Query;
 
-import com.danilo.salaaula.models.ClassName;
+import com.danilo.salaaula.models.ClassRoom;
 import com.danilo.salaaula.models.User;
 import com.danilo.salaaula.models.Post;
 import com.danilo.salaaula.models.Comment;
@@ -47,16 +47,16 @@ public abstract class DAO<T> implements DAOInterface<T> {
         config.common().objectClass(Post.class).cascadeOnActivate(true);
 
 
-        config.common().objectClass(ClassName.class).cascadeOnDelete(true);;
-        config.common().objectClass(ClassName.class).cascadeOnUpdate(true);;
-        config.common().objectClass(ClassName.class).cascadeOnActivate(true);
+        config.common().objectClass(ClassRoom.class).cascadeOnDelete(true);;
+        config.common().objectClass(ClassRoom.class).cascadeOnUpdate(true);;
+        config.common().objectClass(ClassRoom.class).cascadeOnActivate(true);
 
 
         // 		indexacao de atributos
         config.common().objectClass(User.class).objectField("cpf").indexed(true);
         config.common().objectClass(Post.class).objectField("title").indexed(true);
         config.common().objectClass(Professor.class).objectField("cpf").indexed(true);
-        config.common().objectClass(ClassName.class).objectField("name").indexed(true);
+        config.common().objectClass(ClassRoom.class).objectField("name").indexed(true);
 
         manager = 	Db4oEmbedded.openFile(config, "banco.db4o");
     }

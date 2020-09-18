@@ -12,7 +12,7 @@ public class User {
     private String email;
     private String password;
     private UserType type;
-    private List<ClassName> classNames;
+    private List<ClassRoom> classRooms;
 
     public User(String cpf, String name, String email,
                 String password, UserType type) {
@@ -21,7 +21,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.type = UserType.STUDENT;
-        this.classNames = new ArrayList<ClassName>();
+        this.classRooms = new ArrayList<ClassRoom>();
     }
 
     public String getCpf() {
@@ -64,7 +64,7 @@ public class User {
         this.type = type;
     }
 
-    public List<ClassName> getClasses() {
-        return this.classNames;
+    public List<ClassRoom> getClasses() {
+        return this.classRooms;
     }
 }
