@@ -3,13 +3,15 @@ package com.danilo.salaaula;
 import com.danilo.salaaula.fachada.Fachada;
 import com.danilo.salaaula.models.*;
 import com.danilo.salaaula.models.ClassRoom;
+import com.danilo.salaaula.view.Console;
 
 import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
-        addProfessor();
+        Console.main(args);
+//        addProfessor();
 //        addStudents();
 //        studentsNotClass();
 //        createObjects();
@@ -61,7 +63,7 @@ public class Main {
         Fachada.inicializar();
         try {
 //            Fachada.addProfessor("1209","Geohot", "geohot@gmail.com", "1234");
-            Fachada.addProfessor("1209","Geohot", "geo@gmail.com", "1234");
+            Fachada.addProfessor("1","Messi", "messi@gmail.com", "1234");
             System.out.println("Professor adicionado");
         } catch (Exception e) {
             System.out.printf("Error. %s", e.getMessage());

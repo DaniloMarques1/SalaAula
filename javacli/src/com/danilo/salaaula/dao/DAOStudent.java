@@ -16,9 +16,9 @@ public class DAOStudent extends DAO<Student> {
         q.constrain(Student.class);
         q.descend("cpf").constrain(cpf);
         List<Student> users = q.execute();
-        if (users.size() > 0) {
+        if (users.size() > 0)
             return users.get(0);
-        }
+
         return null;
     }
 
@@ -55,9 +55,9 @@ class StudentNotInClass implements Evaluation {
         Student user = (Student) candidate.getObject();
         boolean shouldInclude = true;
         for (ClassRoom c: user.getClasses()) {
-            if (c.getName() == this.className) {
+            if (c.getName() == this.className)
                 shouldInclude = false;
-            }
+
         }
         candidate.include(shouldInclude);
     }
