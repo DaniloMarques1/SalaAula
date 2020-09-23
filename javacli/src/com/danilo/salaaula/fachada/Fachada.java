@@ -130,6 +130,22 @@ public class Fachada {
         DAO.commit();
     }
 
+    public static Student signInStudent(String email, String password) throws Exception {
+        Student student = daoStudent.read(email, password);
+        if (student == null)
+            throw new Exception("Email/password incorret");
+
+        return student;
+    }
+
+    public static Professor signInProfessor(String email, String password) throws Exception {
+        Professor professor = daoProfessor.read(email, password);
+        if (professor == null)
+            throw new Exception("Email/password incorret");
+
+        return professor;
+    }
+
     public static List<Professor> getAllProfessors() {
         return daoProfessor.readAll();
     }
