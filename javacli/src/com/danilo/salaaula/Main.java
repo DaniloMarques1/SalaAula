@@ -104,31 +104,6 @@ public class Main {
         Fachada.finalizar();
     }
 
-    public static void listAll() {
-        Fachada.inicializar();
-        try {
-            List<Professor> ps = Fachada.getAllProfessors();
-            for (Professor p: ps) {
-                System.out.println(p);
-                System.out.println("Turmas do professor:");
-                System.out.println("========================");
-                for (ClassRoom c: p.getClasses()) {
-                    System.out.println(c);
-                    System.out.println("Alunos que nao estao na turma:");
-                    System.out.println("========================");
-                    List<Student> students = Fachada.listUsersNotInClass(c.getName());
-                    for (Student u: students) {
-                        System.out.println(u);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            System.out.printf("Error. %s", e.getMessage());
-        }
-
-        Fachada.finalizar();
-    }
-
     public static void addStudentToStragerClass() {
         Fachada.inicializar();
         try {

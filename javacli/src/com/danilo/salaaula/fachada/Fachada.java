@@ -146,7 +146,18 @@ public class Fachada {
         return professor;
     }
 
-    public static List<Professor> getAllProfessors() {
-        return daoProfessor.readAll();
+    public static List<Student> listStudentes() {
+        List<Student> students = daoStudent.readAll();
+
+        return students;
     }
+
+    public static ClassRoom getClassRoomByname(String className) throws Exception {
+        ClassRoom c = daoClassroom.read(className);
+        if (c == null)
+            throw new Exception("Class does not exist");
+
+        return c;
+    }
+
 }
