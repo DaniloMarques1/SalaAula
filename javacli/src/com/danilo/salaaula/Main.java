@@ -27,6 +27,7 @@ public class Main {
 //        addStudents();
     }
 
+    /*
     public static void createObjectsNoDatabase() {
         //Criar um pouco do fluxo, verificar se esta funcionando...
         User u1      = new Student("1", "Danilo", "danilo@gmail.com", "1234");
@@ -58,6 +59,7 @@ public class Main {
         Post post = new Post(p1, "Post 1");
         pob.addPost(post);
     }
+     */
 
     public static void addProfessor() {
         Fachada.inicializar();

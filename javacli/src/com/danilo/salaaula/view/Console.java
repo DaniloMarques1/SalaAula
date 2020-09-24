@@ -235,6 +235,55 @@ public class Console {
         Fachada.inicializar();
         try {
             ClassRoom c = Fachada.getClassRoomByname(className);
+            int choice = showMenuClassRoom();
+            switch (choice) {
+                case 1: {
+                    listClassStudents(c);
+                    break;
+                }
+            }
+        } catch(Exception e) {
+            //TODO
+        }
+        Fachada.finalizar();
+    }
+
+    private static int showMenuClassRoom() {
+        int choice = 1;
+        System.out.println("1. Listar alunos da turma");
+        System.out.println("2. Listar alunos que nao estao na turma");
+        System.out.println("3. Adicionar aluno");
+        System.out.println("4. Adicionar posts");
+        System.out.println("5. Listar posts");
+        System.out.println("6. Acessar post");
+        System.out.print("Opcao,: ");
+        choice = input.nextInt();
+
+        return choice;
+    }
+
+    private static void listClassStudents(ClassRoom c) {
+        List<Student> students = c.getStudents();
+        for (Student student: students) {
+            System.out.println("=====================");
+            System.out.printf("CPF do aluno: %s\n", student.getCpf());
+            System.out.printf("Nome do aluno: %s\n", student.getName());
+            System.out.println("=====================");
+        }
+    }
+
+
+    private static void listStudentsNotInClass(String className) {
+        Fachada.inicializar();
+        try {
+            List<Student> students = Fachada.listUsersNotInClass(className);
+            for (Student student: students) {
+                System.out.printf("Alunos que nao estao nao disciplna de %s\n", className);
+                System.out.println("=====================");
+                System.out.printf("CPF do aluno: %s\n", student.getCpf());
+                System.out.printf("Nome do aluno: %s\n", student.getName());
+                System.out.println("=====================");
+            }
         } catch(Exception e) {
             //TODO
         }
@@ -243,6 +292,7 @@ public class Console {
 
     public static void addProfessor() {
         Fachada.inicializar();
+
         try {
 //            Fachada.addProfessor("1209","Geohot", "geohot@gmail.com", "1234");
             Fachada.addProfessor("1","Messi", "messi@gmail.com", "1234");
@@ -250,6 +300,7 @@ public class Console {
         } catch (Exception e) {
             System.out.printf("Error. %s", e.getMessage());
         }
+
         Fachada.finalizar();
     }
 }

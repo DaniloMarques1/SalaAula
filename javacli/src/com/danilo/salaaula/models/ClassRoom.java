@@ -8,7 +8,7 @@ public class ClassRoom {
     private String name;
     private Professor author;
     private List<Post> posts;
-    private List<User> students; // apenas alunos tipo STUDENT
+    private List<Student> students; // apenas alunos tipo STUDENT
 
     public ClassRoom(String name, Professor author) {
         this.name = name;
@@ -33,15 +33,11 @@ public class ClassRoom {
         this.author = author;
     }
 
-    public List<User> getStudents() {
+    public List<Student> getStudents() {
         return this.students;
     }
 
-    public void setStudents(List<User> students) {
-        this.students = students;
-    }
-
-    public void addStudentToClass(User student) {
+    public void addStudentToClass(Student student) {
         //TODO: isso ta bom?
         this.students.add(student);
         student.getClasses().add(this);
