@@ -23,10 +23,20 @@ public abstract class DAO<T> implements DAOInterface<T> {
             //abrirBancoServidor();
         }
     }
+
     public static void abrirBancoLocal(){
         //Backup.criar("banco.db4o");
         //new File("banco.db4o").delete();  //apagar o banco
+
+        EmbeddedConfiguration config = getConfig();
+
+        manager = 	Db4oEmbedded.openFile(config, "banco.db4o");
+    }
+
+    private static EmbeddedConfiguration getConfig() {
+
         EmbeddedConfiguration config =  Db4oEmbedded.newConfiguration();
+
         config.common().messageLevel(0);  // 0,1,2,3...
         config.common().objectClass(User.class).cascadeOnDelete(true);;
         config.common().objectClass(User.class).cascadeOnUpdate(true);;
@@ -58,7 +68,7 @@ public abstract class DAO<T> implements DAOInterface<T> {
         config.common().objectClass(Professor.class).objectField("cpf").indexed(true);
         config.common().objectClass(ClassRoom.class).objectField("name").indexed(true);
 
-        manager = 	Db4oEmbedded.openFile(config, "banco.db4o");
+        return config;
     }
 
     /*

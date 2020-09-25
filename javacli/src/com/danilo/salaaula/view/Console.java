@@ -1,58 +1,78 @@
 package com.danilo.salaaula.view;
 
 import com.danilo.salaaula.fachada.Fachada;
-import com.danilo.salaaula.models.ClassRoom;
-import com.danilo.salaaula.models.Professor;
-import com.danilo.salaaula.models.Student;
+import com.danilo.salaaula.models.*;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class Console {
     static private final Scanner input = new Scanner(System.in);
+    static private User currentLoginUser;
+
+    static private User getCurrentLoginuser() {
+        return currentLoginUser;
+    }
+    static private void setCurrentLoginUser(User user) {
+        currentLoginUser = user;
+    }
 
     public static void main(String[] args) {
         int profOrStudent = professorOrStudentMenu();
-        int signInSignUp = menuSignInSignUp();
-        switch (profOrStudent) {
-            case 1: {
-                professorMenu(signInSignUp);
-                break;
-            }
-            case 2: {
-                studentMenu(signInSignUp);
+        while (true) {
+            int signInSignUp = menuSignInSignUp();
+            switch (profOrStudent) {
+                case 1: {
+                    professorMenu(signInSignUp);
+                    break;
+                }
+                case 2: {
+                    studentMenu(signInSignUp);
+                    break;
+                }
+                default:
+                    return;
             }
         }
     }
 
     private static void professorMenu(int signInSignUp) {
-        switch (signInSignUp) {
-            case 1: {
-                Professor professor = singInProfessor();
-                fluxoProfessor(professor);
-                break;
-            }
-            case 2: {
-                signUpProfessor();
-                break;
-            }
-        }
+         switch (signInSignUp) {
+             case 1: {
+                 Professor professor = singInProfessor();
+                 if (professor == null)
+                     break;
+                 setCurrentLoginUser(professor);
+                 fluxoProfessor(professor);
+                 break;
+             }
+             case 2: {
+                 signUpProfessor();
+                 break;
+             }
+             default:
+                 return;
+         }
     }
 
     private static void studentMenu(int signInSignUp) {
-        switch (signInSignUp) {
-            case 1: {
-                Student student = singInStudent();
-                break;
-            }
-            case 2: {
-                signUpStudent();
-                break;
-            }
-            default:
-                System.out.println("Escolha incorreta");
-                break;
-        }
+         switch (signInSignUp) {
+             case 1: {
+                 Student student = singInStudent();
+                 if (student == null)
+                     break;;
+                 setCurrentLoginUser(student);
+                 fluxoStudent(student);
+                 break;
+             }
+             case 2: {
+                 signUpStudent();
+                 break;
+             }
+             default:
+                 System.out.println("Escolha incorreta");
+                 break;
+         }
     }
 
     private static Professor singInProfessor() {
@@ -61,7 +81,6 @@ public class Console {
         try {
             System.out.print("Emai: ");
             String email = input.nextLine();
-
             System.out.print("Senha: ");
             String password = input.nextLine();
 
@@ -111,7 +130,7 @@ public class Console {
         try {
             String data[] = readStudentProfessorData();
             Fachada.addProfessor(data[0], data[1], data[2], data[3]);
-            System.out.println("Entrou com sucesso");
+            System.out.println("Cadastrado com sucesso!");
         } catch(Exception e) {
             System.out.printf("Erro: %s\n", e.getMessage());
         }
@@ -158,25 +177,53 @@ public class Console {
     }
 
     private static void fluxoProfessor(Professor professor) {
-        int choice = showMenuProfessor();
-        switch (choice) {
-            case 1: {
-                listClasses(professor);
-                break;
+        while (true) {
+            int choice = showMenuProfessor();
+            switch (choice) {
+                case 1: {
+                    listClasses(professor);
+                    break;
+                }
+                case 2: {
+                    listStudents();
+                    break;
+                }
+                case 3: {
+                    addClassRoom(professor);
+                    break;
+                }
+                case 4: {
+                    System.out.print("Nome da disciplina: ");
+                    String className = input.nextLine();
+                    flowClassRoomProfessor(className);
+                    break;
+                }
+                default:
+                    return;
             }
-            case 2: {
-                listStudents();
-                break;
-            }
-            case 3: {
-                addClassRoom(professor);
-                break;
-            }
-            case 4: {
-                System.out.print("Nome da disciplina: ");
-                String className = input.nextLine();
-                flowClassRoomProfessor(className);
-                break;
+        }
+    }
+
+    private static void fluxoStudent(Student student) {
+        while (true) {
+            int choice = showMenuStudent();
+            switch (choice) {
+                case 1: {
+                    listAllClasses();
+                    break;
+                }
+                case 2: {
+                    listClasses(student);
+                    break;
+                }
+                case 3: {
+                    System.out.print("Nome da disciplina: ");
+                    String className = input.nextLine();
+                    flowClassRoomStudent(className);
+                    break;
+                }
+                default:
+                    return;
             }
         }
     }
@@ -189,20 +236,57 @@ public class Console {
         System.out.println("4. Acessar disciplina");
         System.out.print("Opcao,: ");
         choice = input.nextInt();
+        input.nextLine();
+
+        return choice;
+    }
+
+    private static int showMenuStudent() {
+        int choice = 0;
+        System.out.println("1. Listar disciplinas");
+        System.out.println("2. Listar minhas disciplinas");
+        System.out.println("3. Acessar disciplina");
+        System.out.print("Opcao,: ");
+        choice = input.nextInt();
+        input.nextLine();
 
         return choice;
     }
 
     private static void listClasses(Professor professor) {
-        if (professor.getClasses().size() == 0)
+        Fachada.inicializar();
+        List<ClassRoom> classes = Fachada.getAllProfessorsClasses(professor.getEmail());
+
+        if (classes.isEmpty())
             System.out.println("Voce ainda nao possui turmas cadastradas");
 
-        for (ClassRoom c: professor.getClasses()) {
-            System.out.println("=====================");
+        for (ClassRoom c: classes) {
+            System.out.println("======================");
             System.out.printf("Nome da turma: %s\n", c.getName());
             System.out.printf("Quantidade de estudantes: %d\n", c.getStudents().size());
             System.out.println("=====================");
+            System.out.println("");
         }
+
+        Fachada.finalizar();
+    }
+
+    private static void listClasses(Student student) {
+        Fachada.inicializar();
+        List<ClassRoom> classes = Fachada.getStudentsClasses(student.getEmail());
+
+        if (classes.isEmpty())
+            System.out.println("Voce ainda nao possui turmas");
+
+        for (ClassRoom c: classes) {
+            System.out.println("======================");
+            System.out.printf("Nome da turma: %s\n", c.getName());
+            System.out.printf("Quantidade de estudantes: %d\n", c.getStudents().size());
+            System.out.println("=====================");
+            System.out.println("");
+        }
+
+        Fachada.finalizar();
     }
 
     private static void addClassRoom(Professor professor) {
@@ -210,7 +294,7 @@ public class Console {
         try {
             System.out.print("Nome da turma: ");
             String className = input.nextLine();
-            Fachada.addClassRoom(className, professor.getCpf());
+            Fachada.addClassRoom(className, professor.getEmail());
         } catch(Exception e) {
 
         }
@@ -226,20 +310,92 @@ public class Console {
            System.out.printf("Cpf do aluno: %s\n", student.getCpf());
            System.out.printf("Nome do aluno: %s\n", student.getName());
            System.out.println("=====================");
+           System.out.println("");
        }
 
        Fachada.finalizar();
+    }
+
+    private static void listAllClasses() {
+        Fachada.inicializar();
+        List<ClassRoom> classes = Fachada.getAllClasses();
+        for (ClassRoom c: classes) {
+            System.out.println("=====================");
+            System.out.printf("Nome da turma: %s\n", c.getName());
+            System.out.printf("Nome do professor da turma: %s\n", c.getAuthor().getName());
+            System.out.printf("Email do professor da turma: %s\n", c.getAuthor().getEmail());
+            System.out.println("=====================");
+            System.out.println("");
+        }
+        Fachada.finalizar();
     }
 
     private static void flowClassRoomProfessor(String className) {
         Fachada.inicializar();
         try {
             ClassRoom c = Fachada.getClassRoomByname(className);
-            int choice = showMenuClassRoom();
-            switch (choice) {
-                case 1: {
-                    listClassStudents(c);
-                    break;
+            while (true) {
+                int choice = showMenuClassRoom();
+                switch (choice) {
+                    case 1: {
+                        listClassStudents(c.getName());
+                        break;
+                    }
+                    case 2: {
+                        listStudentsNotInClass(c.getName());
+                        break;
+                    }
+                    case 3: {
+                        addStudentToClass(c.getName());
+                        break;
+                    }
+                    case 4: {
+                        addPostToClassRoom(c.getName(), c.getAuthor().getEmail());
+                        break;
+                    }
+                    case 5: {
+                        listClassRoomPosts(c);
+                        break;
+                    }
+                    case 6: {
+                        System.out.print("Titulo do post: ");
+                        String postTitle = input.nextLine();
+                        flowPost(postTitle);
+                        break;
+                    }
+                    default:
+                        return;
+                }
+            }
+        } catch(Exception e) {
+            //TODO
+        }
+        Fachada.finalizar();
+    }
+
+    private static void flowClassRoomStudent(String className) {
+        Fachada.inicializar();
+        try {
+            ClassRoom c = Fachada.getClassRoomByname(className);
+            while (true) {
+                int choice = showMenuClassRoomStudent();
+                switch (choice) {
+                    case 1: {
+                        listClassStudents(className);
+                        break;
+                    }
+                    case 2: {
+                        listClassRoomPosts(c);
+                        break;
+                    }
+                    case 3: {
+                        System.out.print("Titulo do post: ");
+                        String postTitle = input.nextLine();
+                        flowPost(postTitle);
+                        break;
+                    }
+                    default:
+                        return;
                 }
             }
         } catch(Exception e) {
@@ -258,18 +414,40 @@ public class Console {
         System.out.println("6. Acessar post");
         System.out.print("Opcao,: ");
         choice = input.nextInt();
+        input.nextLine();
 
         return choice;
     }
 
-    private static void listClassStudents(ClassRoom c) {
-        List<Student> students = c.getStudents();
-        for (Student student: students) {
-            System.out.println("=====================");
-            System.out.printf("CPF do aluno: %s\n", student.getCpf());
-            System.out.printf("Nome do aluno: %s\n", student.getName());
-            System.out.println("=====================");
+    private static int showMenuClassRoomStudent() {
+        int choice = 1;
+        System.out.println("1. Listar alunos da turma");
+        System.out.println("2. Listar posts");
+        System.out.println("3. Acessar post");
+        System.out.print("Opcao,: ");
+        choice = input.nextInt();
+        input.nextLine();
+
+        return choice;
+    }
+
+    private static void listClassStudents(String className) {
+        Fachada.inicializar();
+        try {
+            List<Student> students = Fachada.listStudentsInClass(className);
+            for (Student student: students) {
+                System.out.println("=====================");
+                System.out.printf("CPF do aluno: %s\n", student.getCpf());
+                System.out.printf("Email do aluno: %s\n", student.getEmail());
+                System.out.printf("Nome do aluno: %s\n", student.getName());
+                System.out.println("=====================");
+                System.out.println("");
+            }
+
+        } catch (Exception e) {
+            //TODO
         }
+        Fachada.finalizar();
     }
 
 
@@ -283,6 +461,7 @@ public class Console {
                 System.out.printf("CPF do aluno: %s\n", student.getCpf());
                 System.out.printf("Nome do aluno: %s\n", student.getName());
                 System.out.println("=====================");
+                System.out.println("");
             }
         } catch(Exception e) {
             //TODO
@@ -290,17 +469,113 @@ public class Console {
         Fachada.finalizar();
     }
 
-    public static void addProfessor() {
+    private static void addStudentToClass(String className) {
         Fachada.inicializar();
 
         try {
-//            Fachada.addProfessor("1209","Geohot", "geohot@gmail.com", "1234");
-            Fachada.addProfessor("1","Messi", "messi@gmail.com", "1234");
-            System.out.println("Professor adicionado");
+            System.out.print("email do aluno: ");
+            String email = input.nextLine();
+            Fachada.addStudentToClass(email, className);
+            System.out.println("Aluno adicionado com sucesso!");
         } catch (Exception e) {
-            System.out.printf("Error. %s", e.getMessage());
+           //TODO
         }
 
         Fachada.finalizar();
+    }
+
+    private static void addPostToClassRoom(String className, String profEmail) {
+        Fachada.inicializar();
+
+        try {
+            System.out.print("Titulo do post: ");
+            String postTitle = input.nextLine();
+            Fachada.addPostToClassRoom(profEmail, className, postTitle);
+            System.out.println("Post adicionado com sucesso!");
+        } catch (Exception e) {
+            //TODO
+        }
+
+        Fachada.finalizar();
+    }
+
+    private static void listClassRoomPosts(ClassRoom c) {
+        Fachada.inicializar();
+        List<Post> posts = Fachada.getClassRoomPosts(c.getName());
+        for (Post post: posts) {
+            System.out.println("=====================");
+            System.out.printf("Titulo do post: %s\n", post.getTitle());
+            System.out.printf("Quantidade de comentarios: %d\n", post.getCommentaries().size());
+            System.out.println("=====================");
+            System.out.println("");
+        }
+        Fachada.finalizar();
+    }
+
+    private static void flowPost(String postTitle) {
+        Fachada.inicializar();
+        try {
+            Post post = Fachada.getPostByTitle(postTitle);
+            while (true) {
+                int choice = menuPost();
+                switch (choice) {
+                    case 1: {
+                        listPostComments(post.getTitle());
+                        break;
+                    }
+                    case 2: {
+                        addPostComments(post.getTitle());
+                        break;
+                    }
+                    default:
+                        return;
+                }
+            }
+        } catch (Exception e) {
+
+        }
+        Fachada.finalizar();
+    }
+
+    private static int menuPost() {
+       int choice = 0;
+       System.out.println("1. Listar comentarios");
+       System.out.println("2. Adicionar comentario");
+       System.out.print("Opcao,: ");
+       choice = input.nextInt();
+       input.nextLine();
+
+       return choice;
+    }
+
+    private static void listPostComments(String title) {
+        Fachada.inicializar();
+        try {
+            List<Comment> comments = Fachada.getPostCommentaries(title);
+            for (Comment comment: comments) {
+                System.out.println("=====================");
+                System.out.printf("Comentario: %s\n", comment.getComment());
+                System.out.printf("Autor do comentario: %s\n", comment.getAuthor().getName());
+                System.out.println("=====================");
+                System.out.println("");
+            }
+        } catch (Exception e) {
+            //TODO
+        }
+        Fachada.finalizar();
+    }
+
+    private static void addPostComments(String title) {
+        Fachada.inicializar();
+        try {
+            System.out.print("Comentario: ");
+            String comment = input.nextLine();
+            Fachada.addCommentToPost(title, comment, currentLoginUser);
+            System.out.println("Comentario adicionado com sucesso");
+        } catch (Exception e) {
+            //TODO
+        }
+        Fachada.finalizar();
+
     }
 }

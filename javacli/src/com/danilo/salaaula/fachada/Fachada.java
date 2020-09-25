@@ -43,14 +43,14 @@ public class Fachada {
         DAO.commit();
     }
 
-    public static void addClassRoom(String name, String cpfProfessor) throws  Exception {
+    public static void addClassRoom(String name, String professorEmail) throws  Exception {
         DAO.begin();
 
         ClassRoom classRoomExist = daoClassroom.read(name);
         if (classRoomExist != null) {
             throw new Exception("Class already exist");
         }
-        Professor professor = daoProfessor.read(cpfProfessor); // verifica se o professor existe no banco
+        Professor professor = daoProfessor.read(professorEmail); // verifica se o professor existe no banco
         if (professor == null) {
             throw new Exception("Professor it is not registered");
         }
@@ -62,7 +62,7 @@ public class Fachada {
         DAO.commit();
     }
 
-    public static void addStudentToClass(String userCpf, String className) throws Exception {
+    public static void addStudentToClass(String studentEmail, String className) throws Exception {
         DAO.begin();
 
         ClassRoom c = daoClassroom.read(className);
@@ -70,7 +70,7 @@ public class Fachada {
             throw new Exception("Class does not exist");
         }
 
-        Student student = daoStudent.read(userCpf);
+        Student student = daoStudent.read(studentEmail);
         if (student == null) {
             throw new Exception("Student not registered");
         }
@@ -94,14 +94,14 @@ public class Fachada {
         return students;
     }
 
-    public static void addPostToClassRoom(String profCpf, String className, String postTile) throws Exception {
+    public static void addPostToClassRoom(String profEmail, String className, String postTile) throws Exception {
         DAO.begin();
 
         ClassRoom c = daoClassroom.read(className);
         if (c == null)
             throw new Exception("Class does not exist");
 
-        Professor professor = daoProfessor.read(profCpf);
+        Professor professor = daoProfessor.read(profEmail);
         if (c == null)
             throw new Exception("Professor not registered");
 
@@ -131,17 +131,23 @@ public class Fachada {
     }
 
     public static Student signInStudent(String email, String password) throws Exception {
-        Student student = daoStudent.read(email, password);
+        Student student = daoStudent.read(email);
         if (student == null)
-            throw new Exception("Email/password incorret");
+            throw new Exception("Email incorret");
+
+        if (!student.getPassword().equals(password))
+            throw new Exception("password incorret");
 
         return student;
     }
 
     public static Professor signInProfessor(String email, String password) throws Exception {
-        Professor professor = daoProfessor.read(email, password);
+        Professor professor = daoProfessor.read(email);
         if (professor == null)
-            throw new Exception("Email/password incorret");
+            throw new Exception("Email incorret");
+
+        if (!professor.getPassword().equals(password))
+            throw new Exception("password incorret");
 
         return professor;
     }
@@ -152,12 +158,60 @@ public class Fachada {
         return students;
     }
 
+    public static List<Student> listStudentsInClass(String className) throws Exception {
+        ClassRoom c = daoClassroom.read(className);
+        if (c == null)
+            throw new Exception("Turma nao existe");
+
+        return c.getStudents();
+    }
+
     public static ClassRoom getClassRoomByname(String className) throws Exception {
         ClassRoom c = daoClassroom.read(className);
         if (c == null)
             throw new Exception("Class does not exist");
 
         return c;
+    }
+
+    public static Post getPostByTitle(String postTitle) throws Exception {
+        Post post = daoPost.read(postTitle);
+        if (post == null)
+            throw new Exception("Post nao encontrado");
+
+        return post;
+    }
+
+    public static List<Comment> getPostCommentaries(String title) throws Exception {
+        Post post = daoPost.read(title);
+        if (post == null)
+            throw new Exception("Post nao encontrado");
+
+        return post.getCommentaries();
+    }
+
+    public static List<ClassRoom> getAllClasses() {
+        List<ClassRoom> classes = daoClassroom.readAll();
+
+        return classes;
+    }
+
+    public static List<ClassRoom> getAllProfessorsClasses(String email) {
+        Professor professor = daoProfessor.read(email);
+
+        return professor.getClasses();
+    }
+
+    public static List<ClassRoom> getStudentsClasses(String email) {
+        Student student = daoStudent.read(email);
+
+        return student.getClasses();
+    }
+
+    public static List<Post> getClassRoomPosts(String name) {
+        ClassRoom c = daoClassroom.read(name);
+
+        return c.getPosts();
     }
 
 }

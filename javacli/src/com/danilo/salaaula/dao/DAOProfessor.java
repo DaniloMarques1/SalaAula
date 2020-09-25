@@ -10,10 +10,10 @@ import java.util.List;
 public class DAOProfessor extends DAO<Professor> {
     @Override
     public Professor read(Object chave) {
-        String cpf = (String) chave;
+        String email = (String) chave;
         Query q = manager.query();
         q.constrain(Professor.class);
-        q.descend("cpf").constrain(cpf);
+        q.descend("email").constrain(email);
         List<Professor> users = q.execute();
         if (users.size() > 0) {
             return users.get(0);
