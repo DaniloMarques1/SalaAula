@@ -214,4 +214,14 @@ public class Fachada {
         return c.getPosts();
     }
 
+    public static void updateClassRoomName(String oldName, String newName) {
+        DAO.begin();
+
+        ClassRoom c = daoClassroom.read(oldName);
+        c.setName(newName);
+        daoClassroom.update(c);
+
+        DAO.commit();
+    }
+
 }

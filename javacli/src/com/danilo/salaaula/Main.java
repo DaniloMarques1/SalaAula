@@ -10,122 +10,191 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        Console.main(args);
-//        addProfessor();
-//        addStudents();
-//        studentsNotClass();
-//        createObjects();
-//        System.out.printf("");
-//        addStudents();
-//        System.out.printf("");
-//        listAll();
-//        System.out.printf("");
-//        addStudentToStragerClass();
-//        System.out.printf("");
-//        listAll();
-//        System.out.printf("");
-//        addStudents();
+//        Console.main(args);
+//        cadastrarProfessores();
+//        cadastrarAlunos();
+//        listarAlunos();
+//        cadastrarTurma();
+//        adicionarAlunoATurma();
+//        listarAlunosDaTurma();
+//        listarAlunosQueNaoEstaoNaTurma();
+//        cadastrarPostParaTurma();
+//        listarPostaDaTurma();
+//        adicionarComentarioParaPost();
+//        listarComentariosDoPost();
+//        atualizarNomeDaTurma();
+//        listarTurmas();
     }
 
-    /*
-    public static void createObjectsNoDatabase() {
-        //Criar um pouco do fluxo, verificar se esta funcionando...
-        User u1      = new Student("1", "Danilo", "danilo@gmail.com", "1234");
-        Professor p1 = new Professor("2", "Messi", "messi@gmail.com", "12345");
-        ClassRoom c1     = new ClassRoom("POB", p1);
-        c1.addStudentToClass(u1);
-        p1.createClass(c1);
+    public static void cadastrarProfessores() {
+        Fachada.inicializar();
+        try {
+            Fachada.addProfessor("1", "Fausto", "fausto@gmail.com", "1234");
+            Fachada.addProfessor("2", "Luiz Carlos", "luiz@gmail.com", "1234");
+            System.out.println("Professor cadastrado com sucesso!");
+        } catch (Exception e) {
+            System.out.printf("Erro cadastrando professor: %s\n", e.getMessage());
+        }
+        Fachada.finalizar();
+    }
 
-        Professor p2 = new Professor("3", "Diniz", "diniz@gmail.com", "12345");
-        ClassRoom c2     = new ClassRoom("Matematica", p2);
-        c2.addStudentToClass(u1);
-        p2.createClass(c2);
+    public static void cadastrarAlunos() {
+        Fachada.inicializar();
+        try {
+            //Fachada.addStudent("3", "Danilo", "danilo@gmail.com", "1234");
+            //Fachada.addStudent("4", "Fitz", "fitz@gmail.com", "1234");
+            Fachada.addStudent("5", "Jose", "jose@gmail.com", "1234");
+            System.out.println("Aluno cadastrado com sucesso!");
+        } catch (Exception e) {
+            System.out.printf("Erro cadastrando aluno(s): %s\n", e.getMessage());
+        }
+        Fachada.finalizar();
+    }
 
-        // listando as turmas de um determinado aluno
-        List<ClassRoom> turmas = u1.getClasses();
-        for (ClassRoom c: turmas) {
-            System.out.printf("Nome: %s\n", c.getName());
+    public static void listarAlunos() {
+        Fachada.inicializar();
+        List<Student> students = Fachada.listStudentes();
+
+        if (students.isEmpty()) {
+            System.out.println("Nenhum estudante cadastrado");
+            return;
+        }
+        listagemDeAlunos(students);
+        Fachada.finalizar();
+    }
+
+    public static void cadastrarTurma() {
+        Fachada.inicializar();
+        try {
+            Fachada.addClassRoom("Programacao orientedada a objetos", "luiz@gmail.com");
+            System.out.println("Turma cadastrada com sucesso!");
+        } catch (Exception e) {
+            System.out.println("Erro ao cadastrar turma");
+        }
+        Fachada.finalizar();
+    }
+
+    public static void listarTurmas() {
+        Fachada.inicializar();
+        List<ClassRoom> classes = Fachada.getAllClasses();
+        for (ClassRoom c: classes) {
+            System.out.printf("Nome da turma: %s\n", c.getName());
+            System.out.printf("Quantidade de alunos: %d\n", c.getStudents().size());
             System.out.printf("Professor: %s\n", c.getAuthor().getName());
+            System.out.println("======================");
+            System.out.println("");
         }
-        System.out.println("");
-        System.out.println("");
-
-        List<ClassRoom> pTurmas = p1.getClasses();
-        for (ClassRoom c: pTurmas) {
-            System.out.printf("Nome: %s\n", c.getName());
-        }
-
-        ClassRoom pob = p1.getClasses().get(0);
-        Post post = new Post(p1, "Post 1");
-        pob.addPost(post);
+        Fachada.finalizar();
     }
-     */
 
-    public static void addProfessor() {
+    public static void adicionarAlunoATurma() {
         Fachada.inicializar();
         try {
-//            Fachada.addProfessor("1209","Geohot", "geohot@gmail.com", "1234");
-            Fachada.addProfessor("1","Messi", "messi@gmail.com", "1234");
-            System.out.println("Professor adicionado");
+            Fachada.addStudentToClass("danilo@gmail.com", "Turma 1");
+            Fachada.addStudentToClass("fitz@gmail.com", "Turma 1");
+            System.out.println("Aluno(s) adicionado a turma com sucesso");
         } catch (Exception e) {
-            System.out.printf("Error. %s", e.getMessage());
+            System.out.printf("Erro ao adicionar aluno a turma: %s\n", e.getMessage());
         }
         Fachada.finalizar();
     }
 
-    public static void createObjects() {
+    public static void listarAlunosDaTurma() {
         Fachada.inicializar();
-
         try {
-            // criando uma nova turma
-
-            Fachada.addProfessor("1", "Strager", "strager@gmail.com", "1234");
-            Fachada.addClassRoom("Matematics 1", "1");
-
-            System.out.println("Turma criada com sucesso!");
+            List<Student> students = Fachada.listStudentsInClass("Turma 1");
+            listagemDeAlunos(students);
         } catch (Exception e) {
-            System.out.printf("Error. %s", e.getMessage());
+            System.out.printf("Erro ao listar os alunos da turma: %s\n", e.getMessage());
         }
-
         Fachada.finalizar();
     }
 
-    public static void addStudents() {
+    private static void listarAlunosQueNaoEstaoNaTurma() {
         Fachada.inicializar();
-
-        try{
-//            Fachada.addStudent("2", "Danilo", "danilo@gmail.com", "1234");
-//            Fachada.addStudent("34", "Messi", "messi@gmail.com", "1234");
-            Fachada.addStudent("50", "Leo", "leo@gmail.com", "1234");
-            System.out.println("Estudante criado com sucesso");
+        try {
+            List<Student> students = Fachada.listUsersNotInClass("Turma 1");
+            listagemDeAlunos(students);
         } catch (Exception e) {
+            System.out.printf("Erro ao listar os alunos da turma: %s\n", e.getMessage());
+        }
+        Fachada.finalizar();
+    }
 
-            System.out.printf("Error. %s", e.getMessage());
+    private static void cadastrarPostParaTurma() {
+        Fachada.inicializar();
+        try {
+            Fachada.addPostToClassRoom("fausto@gmail.com", "Turma 1", "Post 2");
+            System.out.println("Post adicionado com sucesso");
+        } catch (Exception e) {
+            System.out.printf("Erro ao adicionar post a turma: %s\n", e.getMessage());
+        }
+        Fachada.finalizar();
+    }
+
+    public static void listarPostaDaTurma() {
+        Fachada.inicializar();
+
+        List<Post> posts = Fachada.getClassRoomPosts("Turma 1");
+        for (Post post: posts) {
+            System.out.printf("Titulo do post: %s\n", post.getTitle());
+            System.out.printf("Quantidade de comentarios: %s\n", post.getCommentaries().size());
+            System.out.println("======================");
+            System.out.println("");
         }
 
         Fachada.finalizar();
     }
 
-    public static void addStudentToStragerClass() {
+    public static void adicionarComentarioParaPost() {
         Fachada.inicializar();
         try {
-            Fachada.addStudentToClass("34", "Matematics 1");
-        } catch(Exception e) {
-            System.out.printf("Error. %s", e.getMessage());
+            User u1 = Fachada.signInProfessor("fausto@gmail.com", "1234");
+            User u2 = Fachada.signInStudent("danilo@gmail.com", "1234");
+            Fachada.addCommentToPost("Post 1", "Comentario 1", u1);
+            Fachada.addCommentToPost("Post 1", "Comentario 2", u2);
+            System.out.println("Comentario adicionado com sucesso");
+        } catch (Exception e) {
+            System.out.printf("Erro ao adicionar comentario ao post: %s\n", e.getMessage());
         }
         Fachada.finalizar();
+
     }
 
-    public static void studentsNotClass() {
+    public static void listarComentariosDoPost() {
         Fachada.inicializar();
         try {
-            List<Student> students = Fachada.listUsersNotInClass( "Matematics 1");
-            for (Student std: students) {
-                System.out.println(std);
+            List<Comment> comments = Fachada.getPostCommentaries("Post 1");
+            for (Comment comment: comments) {
+                System.out.printf("Comentario: %s\n", comment.getComment());
+                System.out.printf("Autor: %s\n", comment.getAuthor().getName());
+                System.out.println("");
             }
-        } catch(Exception e) {
-            System.out.printf("Error. %s", e.getMessage());
+        } catch (Exception e) {
+            System.out.printf("erro ao listar os comentarios %s\n", e.getMessage());
         }
         Fachada.finalizar();
     }
+
+    public static void atualizarNomeDaTurma() {
+        Fachada.inicializar();
+        try {
+            Fachada.updateClassRoomName("Turma 1", "Persistencia de Objetos");
+            System.out.println("Nome alterado com sucesso");
+        } catch (Exception e) {
+            System.out.printf("Erro ao tentar atualizar o nome da turma: ", e.getMessage());
+        }
+        Fachada.finalizar();
+    }
+
+    private static void listagemDeAlunos(List<Student> students) {
+        for (Student student: students){
+            System.out.printf("Nome: %s\n", student.getName());
+            System.out.printf("Email: %s\n", student.getEmail());
+            System.out.printf("Cpf: %s\n", student.getCpf());
+            System.out.println("======================");
+            System.out.println("");
+        }
+    }
+
 }

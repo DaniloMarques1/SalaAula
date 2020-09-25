@@ -117,9 +117,9 @@ public class Console {
         try {
             String data[] = readStudentProfessorData();
             Fachada.addStudent(data[0], data[1], data[2], data[3]);
-            System.out.println("Entrou com sucesso!");
+            System.out.println("Cadastrado com sucesso!");
         } catch(Exception e) {
-            System.out.printf("Eror: %s\n", e.getMessage());
+            System.out.printf("Erro ao cadastrar: %s\n", e.getMessage());
         }
         Fachada.finalizar();
     }
@@ -132,7 +132,7 @@ public class Console {
             Fachada.addProfessor(data[0], data[1], data[2], data[3]);
             System.out.println("Cadastrado com sucesso!");
         } catch(Exception e) {
-            System.out.printf("Erro: %s\n", e.getMessage());
+            System.out.printf("Erro ao cadastrar: %s\n", e.getMessage());
         }
         Fachada.finalizar();
     }
@@ -209,14 +209,10 @@ public class Console {
             int choice = showMenuStudent();
             switch (choice) {
                 case 1: {
-                    listAllClasses();
-                    break;
-                }
-                case 2: {
                     listClasses(student);
                     break;
                 }
-                case 3: {
+                case 2: {
                     System.out.print("Nome da disciplina: ");
                     String className = input.nextLine();
                     flowClassRoomStudent(className);
@@ -243,9 +239,8 @@ public class Console {
 
     private static int showMenuStudent() {
         int choice = 0;
-        System.out.println("1. Listar disciplinas");
-        System.out.println("2. Listar minhas disciplinas");
-        System.out.println("3. Acessar disciplina");
+        System.out.println("1. Listar minhas disciplinas");
+        System.out.println("2. Acessar disciplina");
         System.out.print("Opcao,: ");
         choice = input.nextInt();
         input.nextLine();
@@ -296,7 +291,7 @@ public class Console {
             String className = input.nextLine();
             Fachada.addClassRoom(className, professor.getEmail());
         } catch(Exception e) {
-
+            //TODO
         }
         Fachada.finalizar();
     }
@@ -363,6 +358,10 @@ public class Console {
                         flowPost(postTitle);
                         break;
                     }
+                    case 7: {
+                        changeClassRoomName(c.getName());
+                        break;
+                    }
                     default:
                         return;
                 }
@@ -412,6 +411,7 @@ public class Console {
         System.out.println("4. Adicionar posts");
         System.out.println("5. Listar posts");
         System.out.println("6. Acessar post");
+        System.out.println("7. Trocar nome da turma");
         System.out.print("Opcao,: ");
         choice = input.nextInt();
         input.nextLine();
@@ -532,7 +532,20 @@ public class Console {
                 }
             }
         } catch (Exception e) {
+            //TODO
+        }
+        Fachada.finalizar();
+    }
 
+    private static void changeClassRoomName(String oldName) {
+        Fachada.inicializar();
+        try {
+            System.out.printf("Nome atual: %s\n", oldName);
+            System.out.print("Novo nome da turma: ");
+            String newName = input.nextLine();
+            Fachada.updateClassRoomName(oldName, newName);
+        } catch (Exception e) {
+            //TODO
         }
         Fachada.finalizar();
     }
@@ -570,7 +583,7 @@ public class Console {
         try {
             System.out.print("Comentario: ");
             String comment = input.nextLine();
-            Fachada.addCommentToPost(title, comment, currentLoginUser);
+            Fachada.addCommentToPost(title, comment, getCurrentLoginuser());
             System.out.println("Comentario adicionado com sucesso");
         } catch (Exception e) {
             //TODO
