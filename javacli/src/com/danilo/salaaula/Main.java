@@ -17,7 +17,8 @@ public class Main {
 //        cadastrarTurma();
 //        adicionarAlunoATurma();
 //        listarAlunosDaTurma();
-//        listarAlunosQueNaoEstaoNaTurma();
+//        System.out.println("Que nao estao na turma");
+        listarAlunosQueNaoEstaoNaTurma();
 //        cadastrarPostParaTurma();
 //        listarPostaDaTurma();
 //        adicionarComentarioParaPost();
@@ -38,12 +39,16 @@ public class Main {
         Fachada.finalizar();
     }
 
+    public static void listarProfessores() {
+
+    }
+
     public static void cadastrarAlunos() {
         Fachada.inicializar();
         try {
-            //Fachada.addStudent("3", "Danilo", "danilo@gmail.com", "1234");
-            //Fachada.addStudent("4", "Fitz", "fitz@gmail.com", "1234");
-            Fachada.addStudent("5", "Jose", "jose@gmail.com", "1234");
+            Fachada.addStudent("3", "Danilo", "danilo@gmail.com", "1234");
+            Fachada.addStudent("4", "Fitz", "fitz@gmail.com", "1234");
+            //Fachada.addStudent("5", "Jose", "jose@gmail.com", "1234");
             System.out.println("Aluno cadastrado com sucesso!");
         } catch (Exception e) {
             System.out.printf("Erro cadastrando aluno(s): %s\n", e.getMessage());
@@ -66,7 +71,7 @@ public class Main {
     public static void cadastrarTurma() {
         Fachada.inicializar();
         try {
-            Fachada.addClassRoom("Programacao orientedada a objetos", "luiz@gmail.com");
+            Fachada.addClassRoom("Turma 1", "luiz@gmail.com");
             System.out.println("Turma cadastrada com sucesso!");
         } catch (Exception e) {
             System.out.println("Erro ao cadastrar turma");
@@ -91,7 +96,7 @@ public class Main {
         Fachada.inicializar();
         try {
             Fachada.addStudentToClass("danilo@gmail.com", "Turma 1");
-            Fachada.addStudentToClass("fitz@gmail.com", "Turma 1");
+//            Fachada.addStudentToClass("fitz@gmail.com", "Programacao orientada a objetos");
             System.out.println("Aluno(s) adicionado a turma com sucesso");
         } catch (Exception e) {
             System.out.printf("Erro ao adicionar aluno a turma: %s\n", e.getMessage());

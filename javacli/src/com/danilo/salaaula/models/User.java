@@ -1,13 +1,10 @@
 package com.danilo.salaaula.models;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class User {
-    /* TESTANDO CRIACAO DE OBJETOS */
-
-    private String cpf; // chave primaria
+    private String cpf;
     private String name;
     private String email;
     private String password;
