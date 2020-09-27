@@ -50,7 +50,6 @@ class StudentNotInClass implements Evaluation {
         this.className = className;
     }
 
-    @Override
     public void evaluate(Candidate candidate) {
         Student user = (Student) candidate.getObject();
         boolean shouldInclude = true;
@@ -72,7 +71,6 @@ class StudentRegistered implements Evaluation {
         this.cpf   = cpf;
     }
 
-    @Override
     public void evaluate(Candidate candidate) {
         Student std = (Student) candidate.getObject();
         boolean flag = false;
